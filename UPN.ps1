@@ -1,10 +1,3 @@
-#-----Output-Log------#
-
-trap {
-  $Time = Get-Date
-  "$Time - Script errored and stopped running. error: $($_ | Out-String)"  | out-file c:\UPNlog.log -append
-}
-
 #------warning------#
 
 Write-Warning "This script will add a new UPN and change all users to that UPN." -WarningAction Inquire
@@ -30,25 +23,5 @@ Get-ADForest | Set-ADForest -UPNSuffixes @{ add = $newUpnSuffix } -ErrorAction S
       Write-Host ("Updating upn for user {0} from {1} to {2}" -f $userObject.SamAccountName, $userObject.UserPrincipalName, $newUpn)
       Set-ADUser -Identity $userObject -UserPrincipalName $newUpn
   }
-
 #-----------------#
 
-  <# Try
-  {
-
-}
-Catch
-{
-  $exception = $_.Exception.Message
-  $item = $_.Exception.ItemName
-
-  Write-Output $item $exception
-}
-
-Finally
-{
-  $Time=Get-Date
-  "$Time - Script errored and stopped running.
-  error: $exception"  | out-file c:\UPNlog.log -append
-}
-#>
